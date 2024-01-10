@@ -1,0 +1,73 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+struct Product {
+    int id;
+    string name;
+    };
+
+vector<Product> inventory;
+
+void addProduct(int id, const string& name) {
+    Product newProduct = {id, name};
+    inventory.push_back(newProduct);
+}
+
+void removeProduct(int id) {
+    auto it = remove_if(inventory.begin(), inventory.end(), [id](const Product& p) {
+        return p.id == id;
+    });
+    inventory.erase(it, inventory.end());
+}
+
+int main() {
+    
+    addProduct(1, "Product A");
+    addProduct(2, "Product B");
+    removeProduct(1);
+    cout << "Remaining Inventory:\n";
+    for (const auto& product : inventory) {
+        cout << "ID: " << product.id << ", Name: " << product.name << "\n";
+    }
+
+    return 0;
+}
+
+//Performance Evaluation (sorting.cpp):
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <chrono>
+
+using namespace std;
+
+int main() {
+    const int vectorSize = 100000;
+    vector<int> numbers(vectorSize);
+    for (int i = vectorSize; i > 0; --i) {
+        numbers.push_back(i);
+    }
+
+    auto startTimeBubble = chrono::high_resolution_clock::now();
+        sort(numbers.begin(), numbers.end());
+    auto endTimeBubble = chrono::high_resolution_clock::now();
+
+    auto durationBubble = chrono::duration_cast<chrono::microseconds>(endTimeBubble - startTimeBubble);
+    cout << "Bubble Sort Execution Time: " << durationBubble.count() << " microseconds\n";
+
+
+    cout << "First 10 integers: ";
+    for (int i = 0; i < 10; ++i) {
+        cout << numbers[i] << " ";
+    }
+    cout << "\nLast 10 integers: ";
+    for (int i = vectorSize - 10; i < vectorSize; ++i) {
+        cout << numbers[i] << " ";
+    }
+    cout << "\n";
+
+    return 0;
+}
